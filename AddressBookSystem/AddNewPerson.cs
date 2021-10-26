@@ -7,6 +7,49 @@ namespace AddressBookSystem
 {
     public class WelcomeMessage
     {
+        public static void mainMethod()
+        {
+            int ExitCondition = 0;
+            WelcomeMessage.Welcome();
+            int exit = 1;
+            while (ExitCondition != exit)
+            {
+                WelcomeMessage.DisplayMsg();
+                int response = Convert.ToInt32(Console.ReadLine());
+                if (response >= 1 && response <= 5)
+                {
+                    Console.Clear();
+
+                    switch (response)
+                    {
+                        case 1:
+                            AddNewPerson.AddPerson();
+                            Console.WriteLine();
+                            break;
+                        case 2:
+                            AddNewPerson.RemovePerson();
+                            break;
+                        case 3:
+                            AddNewPerson.ListPeople();
+                            break;
+                        case 4:
+                            AddNewPerson.Editperson();
+                            break;
+                        case 5:
+
+                            exit = 0;
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please Enter Valid Input.");
+                }
+
+            }
+
+        }
         public static void Welcome()
         {
             Console.WriteLine("=====================================");
@@ -16,12 +59,13 @@ namespace AddressBookSystem
 
         public static void DisplayMsg()
         {
+            Console.WriteLine("\t--ADDRESS BOOK--");
             Console.WriteLine("\t---MAIN-WINDOW---\n\n  [Please Select]");
             Console.WriteLine(" -Press 1 to Add Contact");
             Console.WriteLine(" -Press 2 to Remove Contact");
             Console.WriteLine(" -Press 3 to List Contacts");
             Console.WriteLine(" -Press 4 to Edit Contact");
-            Console.WriteLine(" -Press 5 to Exit");
+            Console.WriteLine(" -Press 5 to Exit Address Book");
             Console.WriteLine();
             Console.Write(" Enter choise :");
         }
@@ -37,9 +81,65 @@ namespace AddressBookSystem
         public string PhonNumber { get; set; }
         public string Email { get; set; }
     }
+
     public class AddNewPerson
     {
         public static List<Person> People = new List<Person>();
+        public static Dictionary<string, List<Person>> AddressBookDictionary = new Dictionary<string, List<Person>>();
+        public static string NewAddressBookName;
+
+        public static void WelcomeMsgMain()
+        {
+            Console.WriteLine("===============================");
+            Console.WriteLine("WELCOME TO ADDRESS BOOK SYSTEM");
+            Console.WriteLine("===============================");
+
+        }
+        public static void DisplayMsgMain()
+        {
+            Console.WriteLine("\tADDRESS BOOK SYSTEM");
+            Console.WriteLine("\t---MAIN-WINDOW---\n\n  [Please Select]");
+            Console.WriteLine(" -Press 1 to Add New Address Book");
+            Console.WriteLine(" -Press 2 to Remove Address Book");
+            Console.WriteLine(" -Press 3 to List Address Book");
+            Console.WriteLine(" -Press 4 to Exit System");
+            Console.WriteLine();
+            Console.Write(" Enter choise :");
+        }
+        public static void AddAddressBook()
+        {
+            Console.Write("Enter Name For Address Book :");
+            NewAddressBookName = Console.ReadLine();
+            Console.Clear();
+            if (AddressBookDictionary.ContainsKey(NewAddressBookName))
+            {
+                Console.WriteLine("{0} Already Exists..", NewAddressBookName);
+                Console.WriteLine("Press any key to Continue...");
+                Console.ReadKey();
+                Console.Clear();
+
+            }
+            else
+            {
+                Console.WriteLine("welcome to Address book {0}", NewAddressBookName);
+                WelcomeMessage.mainMethod();
+            }
+
+        }
+        public static void ListAddressBook()
+        {
+            int num = 1;
+            Console.WriteLine("Here are current Address Books :");
+            foreach (var element in AddressBookDictionary)
+            {
+                Console.WriteLine(num + " : " + element.Key);
+                num++;
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadLine();
+            Console.Clear();
+
+        }
 
         public static void AddPerson()
         {
@@ -63,25 +163,26 @@ namespace AddressBookSystem
             person.Email = Console.ReadLine();
 
             People.Add(person);
-            
+            AddressBookDictionary.Add(NewAddressBookName, People);
+
             Console.WriteLine("Contact saved successfully....");
             Console.WriteLine("Press any key to continue.");
             Console.ReadKey();
             Console.Clear();
-            
+
 
         }
 
         private static void PrintPerson(Person person)
         {
-            Console.WriteLine("First Name :"+person.Fname);
-            Console.WriteLine("Last Name :"+person.Lname);
-            Console.WriteLine("Address :"+person.Address);
-            Console.WriteLine("City :"+person.City);
-            Console.WriteLine("State :"+person.State);
-            Console.WriteLine("Zip Code :"+person.ZipCode);
-            Console.WriteLine("Phone Number :"+person.PhonNumber);
-            Console.WriteLine("Email :"+person.Email);
+            Console.WriteLine("First Name :" + person.Fname);
+            Console.WriteLine("Last Name :" + person.Lname);
+            Console.WriteLine("Address :" + person.Address);
+            Console.WriteLine("City :" + person.City);
+            Console.WriteLine("State :" + person.State);
+            Console.WriteLine("Zip Code :" + person.ZipCode);
+            Console.WriteLine("Phone Number :" + person.PhonNumber);
+            Console.WriteLine("Email :" + person.Email);
         }
 
         public static void ListPeople()
@@ -90,14 +191,15 @@ namespace AddressBookSystem
             {
                 Console.WriteLine("Address Book is empty. Press any key to continue ");
                 Console.ReadKey();
+                Console.Clear();
                 return;
             }
             Console.WriteLine("Here are current people in your address book:\n");
             foreach (var person in People)
             {
                 PrintPerson(person);
-                
-            Console.WriteLine("=================================");
+
+                Console.WriteLine("=================================");
             }
             Console.WriteLine("\n Press any key to continue.");
             Console.ReadKey();
@@ -111,7 +213,7 @@ namespace AddressBookSystem
             Console.WriteLine("Enter the First name of person you wants to remove");
             string firstName = Console.ReadLine();
             Person person = People.FirstOrDefault(x => x.Fname.ToLower() == firstName.ToLower());
-        
+
             if (person == null)
             {
                 Console.WriteLine("Person could not be found. press any key to continue");
@@ -124,7 +226,7 @@ namespace AddressBookSystem
                 PrintPerson(person);
                 Console.WriteLine("Are you sure you want to remove this person? (Y/N) ");
 
-                if(Console.ReadKey().Key == ConsoleKey.Y)
+                if (Console.ReadKey().Key == ConsoleKey.Y)
                 {
                     People.Remove(person);
                     Console.WriteLine("Person removed. Press any key to continue");
@@ -132,7 +234,7 @@ namespace AddressBookSystem
                     Console.Clear();
                 }
             }
-        
+
         }
         public static void Editperson()
         {
@@ -165,12 +267,12 @@ namespace AddressBookSystem
                 Console.Write("Enter Choise :");
                 int response = int.Parse(Console.ReadLine());
 
-                switch(response)
-                { 
+                switch (response)
+                {
                     case 1:
                         Console.Write("Please Enter new Name :");
                         person.Fname = Console.ReadLine();
-                    break;
+                        break;
                     case 2:
                         Console.Write("Please Enter new Last Name :");
                         person.Lname = Console.ReadLine();
@@ -204,7 +306,7 @@ namespace AddressBookSystem
                 Console.WriteLine("Press any Key to continue.");
                 Console.ReadKey();
                 Console.Clear();
-                
+
             }
 
         }
