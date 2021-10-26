@@ -6,33 +6,29 @@ namespace AddressBookSystem
     {
         static void Main(string[] args)
         {
-            int ExitCondition =0;
-            WelcomeMessage.Welcome();
+            int ExitConditionMain = 0;
+            AddNewPerson.WelcomeMsgMain();
             int exit = 1;
-            while (ExitCondition != exit)
+            while (ExitConditionMain != exit)
             {
-                WelcomeMessage.DisplayMsg();
+                AddNewPerson.DisplayMsgMain();
                 int response = Convert.ToInt32(Console.ReadLine());
-                if (response >=1 && response <=5 )
+                if (response >= 1 && response <= 4)
                 {
                     Console.Clear();
 
                     switch (response)
                     {
                         case 1:
-                            AddNewPerson.AddPerson();
+                            AddNewPerson.AddAddressBook();
                             Console.WriteLine();
                             break;
                         case 2:
-                            AddNewPerson.RemovePerson();
-                            break;
+
                         case 3:
-                            AddNewPerson.ListPeople();
+                            AddNewPerson.ListAddressBook();
                             break;
                         case 4:
-                            AddNewPerson.Editperson();
-                            break;
-                        case 5:
                             exit = 0;
                             break;
                     }
@@ -48,6 +44,6 @@ namespace AddressBookSystem
         }
     }
 }
-            
-           
-     
+
+
+
